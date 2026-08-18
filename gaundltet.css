@@ -1,0 +1,516 @@
+/* ==========================================================================
+   RESET & VARIÁVEIS OLED DARK
+   ========================================================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  background-color: #050706 !important;
+  color: #edf2ee !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+body {
+  background-image: radial-gradient(ellipse at 50% -20%, rgba(0, 255, 136, 0.08) 0%, transparent 60%);
+}
+
+.page {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 3.5rem 1.5rem 6rem;
+}
+
+/* ==========================================================================
+   CABEÇALHO & BADGES
+   ========================================================================== */
+.header-group {
+  margin-bottom: 2.5rem;
+}
+
+.eyebrow-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+  flex-wrap: wrap;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #00ff88;
+  background: rgba(0, 255, 136, 0.1);
+  border: 1px solid rgba(0, 255, 136, 0.25);
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+}
+
+.eyebrow::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00ff88;
+  box-shadow: 0 0 8px #00ff88;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: monospace;
+  font-size: 0.75rem;
+  color: #8e9e94;
+  border: 1px solid #1c2720;
+  background: #0f1512;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+}
+
+.status-badge .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00ff88;
+}
+
+h1 {
+  font-size: clamp(2rem, 1.6rem + 1.5vw, 2.5rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  font-weight: 800;
+  color: #ffffff !important;
+  margin-bottom: 0.85rem;
+}
+
+.intro {
+  color: #8e9e94 !important;
+  font-size: 1.02rem;
+  max-width: 62ch;
+}
+
+.intro strong {
+  color: #00ff88 !important;
+}
+
+/* ==========================================================================
+   PRESETS RÁPIDOS
+   ========================================================================== */
+.presets-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.presets-label {
+  font-size: 0.8rem;
+  font-family: monospace;
+  color: #4e5e54;
+  text-transform: uppercase;
+  margin-right: 0.3rem;
+}
+
+.preset-pill {
+  background: #0f1512;
+  border: 1px solid #1c2720;
+  color: #8e9e94;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 120ms ease;
+}
+
+.preset-pill:hover {
+  border-color: #00ff88;
+  color: #ffffff;
+  background: #141c18;
+}
+
+/* ==========================================================================
+   FORMULÁRIO & CAMPOS
+   ========================================================================== */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.field {
+  background: #0f1512 !important;
+  border: 1px solid #1c2720 !important;
+  border-radius: 14px;
+  padding: 1.4rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  transition: border-color 140ms ease;
+}
+
+.field:focus-within {
+  border-color: #00ff88 !important;
+  background: #131a16 !important;
+}
+
+.field-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.field-num {
+  flex: none;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 6px;
+  border: 1px solid #2a3d32;
+  background: #050706;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: monospace;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #00ff88;
+}
+
+.field-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #ffffff !important;
+  margin-bottom: 0.2rem;
+}
+
+.field-sub {
+  color: #8e9e94 !important;
+  font-size: 0.9rem;
+}
+
+textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 4.6rem;
+  background: #070a08 !important;
+  border: 1px solid #1c2720 !important;
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  color: #ffffff !important;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  outline: none;
+}
+
+textarea:focus {
+  border-color: #00ff88 !important;
+}
+
+textarea::placeholder {
+  color: #4e5e54;
+  font-style: italic;
+}
+
+.field.has-error {
+  border-color: #ff5555 !important;
+}
+
+.error-msg {
+  display: none;
+  color: #ff5555;
+  font-size: 0.82rem;
+  font-family: monospace;
+}
+
+.field.has-error .error-msg {
+  display: block;
+}
+
+/* ==========================================================================
+   CONTROLES & ADVANCED
+   ========================================================================== */
+.controls {
+  background: #0f1512 !important;
+  border: 1px solid #1c2720 !important;
+  border-radius: 14px;
+  padding: 1.4rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.3rem;
+}
+
+.controls-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.controls-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #8e9e94;
+}
+
+.toggle-group {
+  display: inline-flex;
+  background: #070a08;
+  border: 1px solid #1c2720;
+  border-radius: 8px;
+  padding: 4px;
+  gap: 4px;
+}
+
+.toggle-btn {
+  font-family: monospace;
+  font-size: 0.82rem;
+  color: #8e9e94;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  padding: 0.45rem 0.95rem;
+  cursor: pointer;
+  transition: all 120ms ease;
+}
+
+.toggle-btn[aria-pressed="true"] {
+  background: #00ff88;
+  color: #021208;
+  font-weight: 700;
+}
+
+details.advanced {
+  border-top: 1px solid #1c2720;
+  padding-top: 1.1rem;
+}
+
+details.advanced summary {
+  cursor: pointer;
+  font-size: 0.88rem;
+  font-family: monospace;
+  color: #8e9e94;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  user-select: none;
+}
+
+details.advanced summary::before {
+  content: "▸";
+  color: #00ff88;
+  transition: transform 140ms ease;
+}
+
+details.advanced[open] summary::before {
+  transform: rotate(90deg);
+}
+
+details.advanced summary::-webkit-details-marker {
+  display: none;
+}
+
+.advanced-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+  margin-top: 1.2rem;
+}
+
+.num-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.num-field label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #8e9e94;
+}
+
+.num-field span.hint {
+  font-size: 0.78rem;
+  color: #4e5e54;
+}
+
+input[type="number"], input[type="text"] {
+  width: 100%;
+  background: #070a08 !important;
+  border: 1px solid #1c2720 !important;
+  border-radius: 6px;
+  padding: 0.6rem 0.8rem;
+  color: #ffffff !important;
+  font-family: monospace;
+  font-size: 0.95rem;
+  outline: none;
+}
+
+input[type="number"]:focus, input[type="text"]:focus {
+  border-color: #00ff88 !important;
+}
+
+.webhook-cfg {
+  grid-column: 1 / -1;
+  border-top: 1px dashed #1c2720;
+  padding-top: 0.9rem;
+}
+
+.generate-btn {
+  align-self: flex-start;
+  background: #00ff88 !important;
+  color: #021208 !important;
+  border: none;
+  border-radius: 8px;
+  padding: 0.95rem 1.8rem;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  transition: all 140ms ease;
+}
+
+.generate-btn:hover:not(:disabled) {
+  background: #33ff9f !important;
+  transform: translateY(-1px);
+}
+
+.generate-btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+/* ==========================================================================
+   CARD DE SAÍDA (OUTPUT)
+   ========================================================================== */
+.output {
+  margin-top: 2.4rem;
+  display: none;
+}
+
+.output.visible {
+  display: block;
+}
+
+.output-card {
+  background: #0f1512 !important;
+  border: 1px solid #2a3d32 !important;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.output-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.4rem;
+  border-bottom: 1px solid #1c2720;
+  background: #070a08;
+}
+
+.output-tag {
+  font-family: monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #00ff88;
+}
+
+.copy-btn {
+  background: #141c18;
+  border: 1px solid #2a3d32;
+  color: #ffffff;
+  font-family: monospace;
+  font-size: 0.82rem;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.copy-btn:hover {
+  border-color: #00ff88;
+  background: #1c2720;
+}
+
+.copy-btn.copied {
+  border-color: #00ff88;
+  color: #00ff88;
+}
+
+pre.output-text {
+  margin: 0;
+  padding: 1.5rem;
+  font-family: monospace;
+  font-size: 0.88rem;
+  line-height: 1.65;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  color: #edf2ee !important;
+  background: #050706 !important;
+  max-height: 500px;
+  overflow-y: auto;
+  border-bottom: 1px solid #1c2720;
+}
+
+.output-meta {
+  padding: 0.8rem 1.4rem;
+  font-size: 0.8rem;
+  color: #8e9e94;
+  font-family: monospace;
+  display: flex;
+  justify-content: space-between;
+  background: #070a08;
+}
+
+.guardrail-tag {
+  color: #00ff88;
+}
+
+/* ==========================================================================
+   RODAPÉ
+   ========================================================================== */
+footer {
+  margin-top: 4rem;
+  padding-top: 1.8rem;
+  border-top: 1px solid #1c2720;
+  color: #4e5e54;
+  font-size: 0.82rem;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+footer a {
+  color: #8e9e94;
+  text-decoration: none;
+}
+
+footer a:hover {
+  color: #00ff88;
+}
+
+@media (max-width: 600px) {
+  .advanced-grid {
+    grid-template-columns: 1fr;
+  }
+  .page {
+    padding: 2rem 1rem 4rem;
+  }
+}
