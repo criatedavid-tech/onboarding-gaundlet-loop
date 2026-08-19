@@ -102,6 +102,11 @@
             <input type="text" id="webhookUrl" value="https://seu-n8n.com/webhook/SEU-WEBHOOK-ID">
             <span class="hint">URL do workflow no n8n. Se offline, o compilador local assume automaticamente.</span>
           </div>
+          <div class="num-field webhook-cfg">
+            <label for="webhookSecret">Chave secreta (header X-App-Secret)</label>
+            <input type="text" id="webhookSecret" value="" placeholder="Cole aqui a mesma chave configurada no node &quot;Check Secret&quot; do n8n" autocomplete="off">
+            <span class="hint">Fica só no seu navegador, nunca é salva no código-fonte. Sem ela, o webhook responde 401 e cai no compilador local.</span>
+          </div>
         </div>
       </details>
 

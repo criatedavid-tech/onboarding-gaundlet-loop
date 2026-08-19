@@ -118,6 +118,7 @@
     var roundCap = parseInt(document.getElementById('roundCap').value, 10) || 6;
     var fanoutCap = parseInt(document.getElementById('fanoutCap').value, 10) || 4;
     var webhookUrl = document.getElementById('webhookUrl').value.trim();
+    var webhookSecret = document.getElementById('webhookSecret').value.trim();
 
     generateBtn.disabled = true;
     generateBtn.textContent = 'Compilando Gauntlet Loop...';
@@ -127,9 +128,12 @@
 
     try {
       if (webhookUrl && !/seu-n8n\.com|seu-webhook-id/i.test(webhookUrl)) {
+        var fetchHeaders = { 'Content-Type': 'application/json' };
+        if (webhookSecret) fetchHeaders['X-App-Secret'] = webhookSecret;
+
         var response = await fetch(webhookUrl, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: fetchHeaders,
           body: JSON.stringify({
             tarefa: values.tarefa,
             metodo: values.metodo,
