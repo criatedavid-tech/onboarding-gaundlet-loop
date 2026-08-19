@@ -88,6 +88,7 @@
   var outputTarget = document.getElementById('output-target');
   var copyBtn = document.getElementById('copy-btn');
   var generateBtn = document.querySelector('.generate-btn');
+  var backendStatus = document.getElementById('backendStatus');
 
   form.addEventListener('submit', async function (e) {
     e.preventDefault();
@@ -122,9 +123,10 @@
     generateBtn.textContent = 'Compilando Gauntlet Loop...';
 
     var finalPrompt = '';
+    var usedWebhook = false;
 
     try {
-      if (webhookUrl && !webhookUrl.includes('SEU-N8N.com')) {
+      if (webhookUrl && !/seu-n8n\.com|seu-webhook-id/i.test(webhookUrl)) {
         var response = await fetch(webhookUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -141,6 +143,7 @@
         if (response.ok) {
           var data = await response.json();
           finalPrompt = data.prompt || data.output || '';
+          if (finalPrompt) usedWebhook = true;
         }
       }
     } catch (err) {
@@ -149,6 +152,10 @@
 
     if (!finalPrompt) {
       finalPrompt = buildLocalPrompt(values.tarefa, values.metodo, values.parada, roundCap, fanoutCap, harness);
+    }
+
+    if (backendStatus) {
+      backendStatus.textContent = usedWebhook ? 'Agente n8n conectado' : 'Modo local (compilador interno)';
     }
 
     outputText.textContent = finalPrompt;
@@ -165,18 +172,51 @@
     generateBtn.textContent = 'Gerar Prompt Gauntlet';
   });
 
-  // 6. COPIAR PARA CLIPBOARD
+  // 6. COPIAR PARA CLIPBOARD (com fallback pra quando a permissão é negada)
+  function markCopied() {
+    copyBtn.textContent = '✓ Copiado com sucesso!';
+    copyBtn.classList.add('copied');
+    setTimeout(function () {
+      copyBtn.textContent = 'Copiar Prompt';
+      copyBtn.classList.remove('copied');
+    }, 2000);
+  }
+
+  function legacyCopy(text) {
+    var helper = document.createElement('textarea');
+    helper.value = text;
+    helper.style.position = 'fixed';
+    helper.style.opacity = '0';
+    document.body.appendChild(helper);
+    helper.focus();
+    helper.select();
+    var succeeded = false;
+    try { succeeded = document.execCommand('copy'); } catch (e) { succeeded = false; }
+    document.body.removeChild(helper);
+    return succeeded;
+  }
+
+  function selectOutputText() {
+    var range = document.createRange();
+    range.selectNodeContents(outputText);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    copyBtn.textContent = 'Selecionado — use Ctrl+C';
+    setTimeout(function () { copyBtn.textContent = 'Copiar Prompt'; }, 2400);
+  }
+
   copyBtn.addEventListener('click', function () {
     var text = outputText.textContent;
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text).then(function () {
-        copyBtn.textContent = '✓ Copiado com sucesso!';
-        copyBtn.classList.add('copied');
-        setTimeout(function () {
-          copyBtn.textContent = 'Copiar Prompt';
-          copyBtn.classList.remove('copied');
-        }, 2000);
+      navigator.clipboard.writeText(text).then(markCopied).catch(function () {
+        if (legacyCopy(text)) markCopied();
+        else selectOutputText();
       });
+    } else if (legacyCopy(text)) {
+      markCopied();
+    } else {
+      selectOutputText();
     }
   });
 })();
