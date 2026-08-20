@@ -89,6 +89,25 @@
   var copyBtn = document.getElementById('copy-btn');
   var generateBtn = document.querySelector('.generate-btn');
   var backendStatus = document.getElementById('backendStatus');
+  var webhookUrlField = document.getElementById('webhookUrl');
+  var webhookSecretField = document.getElementById('webhookSecret');
+
+  // Lembra URL/chave do webhook só neste navegador (localStorage), nunca no
+  // código-fonte. Preenche uma vez e ele volta a usar o n8n em toda visita
+  // seguinte, sem precisar digitar de novo.
+  try {
+    var savedUrl = localStorage.getItem('gl_webhookUrl');
+    var savedSecret = localStorage.getItem('gl_webhookSecret');
+    if (savedUrl) webhookUrlField.value = savedUrl;
+    if (savedSecret) webhookSecretField.value = savedSecret;
+  } catch (e) { /* localStorage indisponível (modo privado etc.) — segue com os padrões */ }
+
+  function persistWebhookConfig() {
+    try {
+      localStorage.setItem('gl_webhookUrl', webhookUrlField.value.trim());
+      localStorage.setItem('gl_webhookSecret', webhookSecretField.value.trim());
+    } catch (e) { /* ignora se localStorage não estiver disponível */ }
+  }
 
   form.addEventListener('submit', async function (e) {
     e.preventDefault();
@@ -117,8 +136,9 @@
 
     var roundCap = parseInt(document.getElementById('roundCap').value, 10) || 6;
     var fanoutCap = parseInt(document.getElementById('fanoutCap').value, 10) || 4;
-    var webhookUrl = document.getElementById('webhookUrl').value.trim();
-    var webhookSecret = document.getElementById('webhookSecret').value.trim();
+    var webhookUrl = webhookUrlField.value.trim();
+    var webhookSecret = webhookSecretField.value.trim();
+    persistWebhookConfig();
 
     generateBtn.disabled = true;
     generateBtn.textContent = 'Compilando Gauntlet Loop...';
