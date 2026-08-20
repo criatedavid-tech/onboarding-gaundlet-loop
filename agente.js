@@ -113,6 +113,32 @@
     } catch (e) { /* ignora se localStorage não estiver disponível */ }
   }
 
+  // O webhook só é usável se a URL não for o placeholder de exemplo.
+  function webhookUsavel(url) {
+    return !!url && !/seu-n8n\.com|seu-webhook-id/i.test(url);
+  }
+
+  // Antes de gerar, o badge mostra o que está CONFIGURADO (não dá pra saber
+  // se o n8n responde sem tentar). Depois de gerar, o submit sobrescreve com
+  // o que de fato aconteceu.
+  function atualizarBadgeConfig() {
+    if (!backendStatus) return;
+    var url = webhookUrlField.value.trim();
+    var secret = webhookSecretField.value.trim();
+
+    if (!webhookUsavel(url)) {
+      backendStatus.textContent = 'Modo local (webhook não configurado)';
+    } else if (!secret) {
+      backendStatus.textContent = 'n8n configurado — falta a chave';
+    } else {
+      backendStatus.textContent = 'n8n pronto (não testado ainda)';
+    }
+  }
+
+  atualizarBadgeConfig();
+  webhookUrlField.addEventListener('input', atualizarBadgeConfig);
+  webhookSecretField.addEventListener('input', atualizarBadgeConfig);
+
   form.addEventListener('submit', async function (e) {
     e.preventDefault();
 
@@ -151,7 +177,7 @@
     var usedWebhook = false;
 
     try {
-      if (webhookUrl && !/seu-n8n\.com|seu-webhook-id/i.test(webhookUrl)) {
+      if (webhookUsavel(webhookUrl)) {
         var fetchHeaders = { 'Content-Type': 'application/json' };
         if (webhookSecret) fetchHeaders['X-App-Secret'] = webhookSecret;
 
