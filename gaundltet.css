@@ -497,6 +497,17 @@ footer {
   gap: 1rem;
 }
 
+.footer-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.footer-copy {
+  color: #8e9e94;
+  font-weight: 600;
+}
+
 footer a {
   color: #8e9e94;
   text-decoration: none;

@@ -1,6 +1,10 @@
 (function () {
   'use strict';
 
+  // 0. ANO DO COPYRIGHT — sempre o ano corrente, sem precisar editar o HTML
+  var anoAtual = document.getElementById('anoAtual');
+  if (anoAtual) anoAtual.textContent = new Date().getFullYear();
+
   // 1. ESTADO GLOBAL E SELEÇÃO DE HARNESS
   var harness = 'claude';
   var toggleBtns = document.querySelectorAll('.toggle-btn');
